@@ -7,6 +7,13 @@ namespace cSharp.day1
     public static void run()
     {
       Console.WriteLine("Day 1");
+      
+      Console.WriteLine($"Fuel requirement: {GetFuelRequirement(12)}");
+    }
+
+    public static int GetFuelRequirement(int mass)
+    {
+      return (mass / 3) - 2;
     }
   }
 }
