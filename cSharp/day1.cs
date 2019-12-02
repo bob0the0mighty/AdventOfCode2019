@@ -12,7 +12,6 @@ namespace cSharp.day1 {
       var masses = File.ReadLines("../Input/day1.1")
         .Select(line => int.Parse(line));
 
-
       var fuel = masses.Select(mass => GetFuelRequirement(mass))
         .Sum();
 
@@ -29,12 +28,13 @@ namespace cSharp.day1 {
       var unmanagedMass = mass;
       var totalFuel = 0;
 
-      while(true){
+      while (true) {
         var newMass = GetFuelRequirement(unmanagedMass);
         unmanagedMass = newMass;
-        if(unmanagedMass <= 0)
+        if (unmanagedMass <= 0) {
           break;
-        totalFuel += newMass; 
+        }
+        totalFuel += newMass;
       }
 
       return totalFuel;
