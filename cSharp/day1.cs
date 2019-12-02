@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 
 namespace cSharp.day1 {
-  public class dayOne {
-    public static void run() {
+  public class DayOne {
+    public static void Run() {
       Console.WriteLine("Day 1");
       Console.WriteLine("Part 1");
 
