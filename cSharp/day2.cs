@@ -30,12 +30,28 @@ namespace cSharp.day2 {
       Console.WriteLine($"Index 0 value: {computedCodes[0]}");
       Console.WriteLine("Part 2");
 
-      var range = Enumerable.Range(0, 99);
-      var nouns = range.ToList();
-      var verbs = range.ToList();
+      var range = Enumerable.Range(0, 100);
+      var nounAndVerbs = new List<(int, int)>();
+      foreach(var noun in range.ToArray()){
+        foreach(var verb in range.ToArray()){
+          nounAndVerbs.Add((noun, verb));
+        }
+      }
 
-      nouns.AsParallel()
-        .Select()
+      var correctNounAndVerb = nounAndVerbs
+        .Select(tup => {
+          var tempArr = intcodes.ToArray();
+
+          tempArr[1] = tup.Item1;
+          tempArr[2] = tup.Item2;
+
+          return (ComputeIntcodes(tempArr)[0], tup);
+        })
+        .Where(search => search.Item1 == 19690720)
+        .First();
+        
+        Console.WriteLine(correctNounAndVerb.tup);
+        Console.WriteLine($"100 * Noun + Verb = {100 * correctNounAndVerb.tup.Item1 + correctNounAndVerb.tup.Item2}");
     }
     
     public static int[] ComputeIntcodes(int[] intcodes){
