@@ -28,6 +28,14 @@ namespace cSharp.day2 {
 
       var computedCodes = ComputeIntcodes(lastMinuteFix);
       Console.WriteLine($"Index 0 value: {computedCodes[0]}");
+      Console.WriteLine("Part 2");
+
+      var range = Enumerable.Range(0, 99);
+      var nouns = range.ToList();
+      var verbs = range.ToList();
+
+      nouns.AsParallel()
+        .Select()
     }
     
     public static int[] ComputeIntcodes(int[] intcodes){
