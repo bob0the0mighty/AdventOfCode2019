@@ -16,12 +16,12 @@ namespace cSharp.day3
       var lines = File.ReadLines("../Input/day3.1")
         .Select(line => line.Split(","));
 
-      var wireRuns = new List<IEnumerable<(int, int)>>();
+      var wireRuns = new List<IEnumerable<(int, int, int)>>();
 
       foreach (var line in lines)
       {
-        var wireRun = new List<(int, int)>();
-        var startPoint = (0, 0);
+        var wireRun = new List<(int, int, int)>();
+        var startPoint = (0, 0, 0);
         foreach (var run in line)
         {
           var currentRun = CalculateWireRun(run, startPoint);
@@ -33,24 +33,25 @@ namespace cSharp.day3
 
       var wireRunSets = wireRuns.Select(run => run.ToHashSet())
         .ToList();
-      wireRunSets[0].IntersectWith(wireRunSets[1]);
+      var connectionWireSet = wireRunSets[0].Join(wireRunSets[1], 
+        first => (first.Item1, first.Item2), 
+        second => (second.Item1, second.Item2),
+        (first, second) => (first.Item1, first.Item2, first.Item3 + second.Item3))
+        .ToList();
 
-      var closestIntersection = wireRunSets[0].MinBy(tup => Math.Abs(tup.Item1) + Math.Abs(tup.Item2))
+      var closestIntersection = connectionWireSet.MinBy(tup => Math.Abs(tup.Item1) + Math.Abs(tup.Item2))
         .First();
       var distance = Math.Abs(closestIntersection.Item1) + Math.Abs(closestIntersection.Item2);
 
       Console.WriteLine($"The manhatten distance to the closest intersection {closestIntersection} is {distance}");
       Console.WriteLine("Part 2");
 
-      var runsWithCost = wireRuns
-        .Select(run => run.Select((point, index) => (point.Item1, point.Item2, index)))
-        .Select(run => run.Where(point => point.Item1 == closestIntersection.Item1 && point.Item2 == closestIntersection.Item2))
-        .Aggregate(0, (cost, run) => run.First().Item3 + cost);
-
-      Console.WriteLine($"Total cost is {runsWithCost}");
+      var cheapestIntersection = connectionWireSet.MinBy(tup => tup.Item3)
+        .First();
+      Console.WriteLine($"Point {cheapestIntersection} total cost is {cheapestIntersection.Item3}");
     }
 
-    public static IEnumerable<(int x, int y)> CalculateWireRun(string instruction, (int x, int y) startPoint)
+    public static IEnumerable<(int x, int y, int cost)> CalculateWireRun(string instruction, (int x, int y, int cost) startPoint)
     {
       var direction = instruction[0];
       var magnitude = int.Parse(instruction.Substring(1));
@@ -63,7 +64,7 @@ namespace cSharp.day3
         {
           var x = xDirection * count + startPoint.x;
           var y = yDirection * count + startPoint.y;
-          return (x, y);
+          return (x, y, startPoint.cost + count);
         });
     }
   }
